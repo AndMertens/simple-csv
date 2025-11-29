@@ -4,7 +4,7 @@ import be.bornput.csv.csv.strategy.api.*;
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
+@Builder(toBuilder = true)
 @Data
 public final class CsvConfig {
 

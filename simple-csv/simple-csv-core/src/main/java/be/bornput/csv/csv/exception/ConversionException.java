@@ -1,7 +1,5 @@
 package be.bornput.csv.csv.exception;
 
-import java.text.ParseException;
-
 public class ConversionException extends Exception {
 
     public ConversionException(String message) {

@@ -49,20 +49,20 @@ public class CsvWriterMapper extends BaseCsvMapper {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < fields.size(); i++) {
-            Field f = fields.get(i);
-            f.setAccessible(true);
+            Field field = fields.get(i);
+            field.setAccessible(true);
 
             try {
-                Object value = f.get(obj);
-                String cell = toCsvString(value, f);
+                Object value = field.get(obj);
+                String cell = toCsvString(value, field);
 
                 // Escape using quote strategy
-                cell = config.getQuoteStrategy().escape(cell);
+                cell = config.getQuoteStrategy().applyQuotes(cell, field);
 
                 sb.append(cell);
                 if (i < fields.size() - 1) sb.append(delimiter);
             } catch (IllegalAccessException e) {
-                throw new ElementConversionException("Failed to access field " + f.getName(), e);
+                throw new ElementConversionException("Failed to access field " + field.getName(), e);
             } catch (ConversionException e) {
                 throw new ConversionException(e);
             }
@@ -78,9 +78,9 @@ public class CsvWriterMapper extends BaseCsvMapper {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < fields.size(); i++) {
-            Field f = fields.get(i);
-            String header = FieldMappingUtils.getHeaderName(f);
-            sb.append(config.getQuoteStrategy().escape(header));
+            Field field = fields.get(i);
+            String header = FieldMappingUtils.getHeaderName(field);
+            sb.append(config.getQuoteStrategy().applyQuotes(header,field));
             if (i < fields.size() - 1) sb.append(delimiter);
         }
 

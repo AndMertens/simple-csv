@@ -16,7 +16,7 @@ public class DefaultEmbeddedStrategy implements EmbeddedStrategy {
     }
 
     @Override
-    public String flatten(Object value, Field parentField) throws ElementConversionException {
-        return EmbeddedUtils.flattenToCsvString(value, parentField,config);
+    public String flatten(Object value, Field parentField, CsvConfig config) throws ElementConversionException {
+        return EmbeddedUtils.flattenToCsvString(value, parentField, config);
     }
 }
