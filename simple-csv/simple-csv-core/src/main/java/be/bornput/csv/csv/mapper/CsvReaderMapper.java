@@ -2,6 +2,7 @@ package be.bornput.csv.csv.mapper;
 
 import be.bornput.csv.csv.annotations.CsvIgnore;
 import be.bornput.csv.csv.config.CsvConfig;
+import be.bornput.csv.csv.converter.ValueConverter;
 import be.bornput.csv.csv.exception.ConversionException;
 import be.bornput.csv.csv.util.FieldMappingUtils;
 
@@ -33,27 +34,24 @@ public class CsvReaderMapper extends BaseCsvMapper {
         String headerLine = reader.readLine();
         if (headerLine == null) return result;
 
-        // Split header using delimiter from CsvConfig
         List<String> headers = splitCsvLine(headerLine, delimiter);
-
-        // Map headers to class fields
         Map<String, Field> fieldMap = FieldMappingUtils.mapHeaders(clazz, headers);
 
         String line;
         while ((line = reader.readLine()) != null) {
             List<String> values = splitCsvLine(line, delimiter);
-
             T instance = clazz.getDeclaredConstructor().newInstance();
 
             for (int i = 0; i < headers.size(); i++) {
                 Field f = fieldMap.get(headers.get(i));
+                if (f == null || f.isAnnotationPresent(CsvIgnore.class)) continue;
 
-                if (f != null && !f.isAnnotationPresent(CsvIgnore.class)) {
-                    f.setAccessible(true);
-                    String raw = i < values.size() ? values.get(i) : "";
-                    Object val = convertValue(f, raw);
-                    f.set(instance, val);
-                }
+                f.setAccessible(true);
+                String raw = i < values.size() ? values.get(i) : "";
+
+                // Use dedicated ValueConverter exception
+                Object val = ValueConverter.convertValue(f, raw, config);
+                f.set(instance, val);
             }
 
             result.add(instance);
@@ -62,9 +60,9 @@ public class CsvReaderMapper extends BaseCsvMapper {
         return result;
     }
 
-    /**
-     * Split a CSV line into values using delimiter and respecting quotes.
-     */
+        /**
+         * Split a CSV line into values using delimiter and respecting quotes.
+         */
     private List<String> splitCsvLine(String line, char delimiter) {
         List<String> values = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
