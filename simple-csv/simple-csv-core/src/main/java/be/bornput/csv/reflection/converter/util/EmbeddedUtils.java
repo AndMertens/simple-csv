@@ -58,7 +58,7 @@ public final class EmbeddedUtils {
     }
 
     /**
-     * Convert embedded object to CSV string.
+     * Convert an embedded object to a CSV string.
      */
     public static String flattenToCsvString(Object obj, Field parentField, CsvConfig config)
             throws ElementConversionException {

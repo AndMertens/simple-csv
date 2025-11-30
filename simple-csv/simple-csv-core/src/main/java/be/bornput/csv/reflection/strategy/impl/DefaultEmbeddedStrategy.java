@@ -9,6 +9,7 @@ import be.bornput.csv.reflection.converter.util.EmbeddedUtils;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class DefaultEmbeddedStrategy implements EmbeddedStrategy {
 
     private final CsvConfig config;

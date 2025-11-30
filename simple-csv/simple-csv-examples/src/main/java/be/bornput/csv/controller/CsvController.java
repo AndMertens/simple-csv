@@ -33,7 +33,7 @@ public class CsvController {
 
         // Write CSV to a temp file
         try {
-            csvService.writeToFile(objects, tempFile);
+            csvService.writeToFile(objects, ExamplePojo.class, tempFile);
 
             // Read back from a temp CSV
             return csvService.readFromFile(tempFile, ExamplePojo.class);

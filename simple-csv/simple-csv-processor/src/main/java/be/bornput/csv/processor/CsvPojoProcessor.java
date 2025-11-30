@@ -52,17 +52,7 @@ public class CsvPojoProcessor extends AbstractProcessor {
         }
     }
 
-    private static class Column {
-        String fieldName;
-        String header;
-        int order;
-
-        Column(String fieldName, String header, int order) {
-            this.fieldName = fieldName;
-            this.header = header;
-            this.order = order;
-        }
-    }
+    private record Column(String fieldName, String header, int order) { }
 
     private List<Column> extractColumns(TypeElement clazz) {
         List<Column> cols = new ArrayList<>();

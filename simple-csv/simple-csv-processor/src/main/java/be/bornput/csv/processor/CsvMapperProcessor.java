@@ -45,7 +45,7 @@ public class CsvMapperProcessor extends AbstractProcessor {
         String className = type.getSimpleName().toString();
         String mapperName = className + "CsvMapper";
 
-        // Collect fields, respecting @CsvField order and ignore flag
+        // Collect fields, while respecting @CsvFieldOrder and the @CsvIgnore option
         List<VariableElement> fields = type.getEnclosedElements().stream()
                 .filter(e -> e.getKind() == ElementKind.FIELD)
                 .map(VariableElement.class::cast)
@@ -119,7 +119,7 @@ public class CsvMapperProcessor extends AbstractProcessor {
 
         mapper.addMethod(writeRow);
 
-        // readRow method - create object from values list: you must match constructor signature
+        // Create a Pojo from a list of values: you must match constructor signature
         // For simplicity generate code that uses `new Xxx(values.get(0), Integer.parseInt(values.get(1)), ...)`
         CodeBlock.Builder readRowCode = CodeBlock.builder();
         readRowCode.add("return new $T(", pojoType);

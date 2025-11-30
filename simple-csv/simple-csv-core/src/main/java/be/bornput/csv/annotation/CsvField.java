@@ -12,5 +12,4 @@ public @interface CsvField {
     int order() default Integer.MAX_VALUE; // ordering for flatten/headers
     String defaultValue() default "";
     boolean ignore() default false;
-    String dateFormat() default ""; // optional date format for this field
 }

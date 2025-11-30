@@ -10,6 +10,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class DefaultNumberStrategy implements NumberStrategy {
     private final CsvConfig config;
     private final DecimalFormat format;

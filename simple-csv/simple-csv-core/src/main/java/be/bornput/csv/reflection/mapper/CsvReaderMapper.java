@@ -24,7 +24,7 @@ public class CsvReaderMapper extends BaseCsvMapper {
     }
 
     /**
-     * Read CSV into list of objects of type T.
+     * Read a CSV and save into a @List<T>.
      */
     public <T> List<T> read(BufferedReader reader, Class<T> clazz)
             throws IOException, NoSuchMethodException, InvocationTargetException,

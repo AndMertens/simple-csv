@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("FieldCanBeLocal")
 @Service
 public class CsvService {
 
@@ -20,12 +21,12 @@ public class CsvService {
         this.config = config;
     }
 
-    public <T> void writeToFile(List<T> objects, File file) throws IOException {
+    public <T> void writeToFile(List<T> objects, Class<T> clazz,File file) throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
 
             if (objects.isEmpty()) return;
 
-            CsvMapper<T> mapper = registry.getMapper((Class<T>) objects.get(0).getClass());
+            CsvMapper<T> mapper = registry.getMapper(clazz);
 
             // write header
             bw.write(String.join(";", mapper.toCsv(objects.get(0))));
