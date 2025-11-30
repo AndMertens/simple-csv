@@ -1,0 +1,73 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>be.bornput</groupId>
+    <artifactId>simple-csv-spring-boot-starter</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <slf4j-version>2.0.12</slf4j-version>
+        <springboot-version>3.5.8</springboot-version>
+        <classgraph-version>4.8.165</classgraph-version>
+    </properties>
+
+    <dependencies>
+        <!-- Bring the core CSV library -->
+        <dependency>
+            <groupId>be.bornput</groupId>
+            <artifactId>simple-csv-core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- Logging API -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-version}</version>
+        </dependency>
+
+        <!-- Classpath scanning -->
+        <dependency>
+            <groupId>io.github.classgraph</groupId>
+            <artifactId>classgraph</artifactId>
+            <version>${classgraph-version}</version>
+        </dependency>
+
+        <!-- Spring Boot Autoconfigure -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${springboot-version}</version>
+        </dependency>
+
+        <!-- To support @ConfigurationProperties -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <version>${springboot-version}</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Spring Boot Maven plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>4.0.0</version>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

@@ -13,11 +13,13 @@
     <modules>
         <module>simple-csv-core</module>
         <module>simple-csv-examples</module>
+        <module>simple-csv-processor</module>
+        <module>simple-csv-spring-boot-starter</module>
     </modules>
 
     <properties>
-        <java.version>23</java.version>
-        <spring.boot.version>3.3.3</spring.boot.version>
+        <java.version>17</java.version>
+        <spring.boot.version>3.5.8</spring.boot.version>
     </properties>
 
     <dependencyManagement>
@@ -29,6 +31,29 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.42</version>
+            </dependency>
+
+            <!-- vulnerabilities -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.5.19</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>1.5.19</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>2.0.9</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 </project>

@@ -1,0 +1,3 @@
+simple-csv:
+  base-packages:
+    - be.bornput.csv.generated

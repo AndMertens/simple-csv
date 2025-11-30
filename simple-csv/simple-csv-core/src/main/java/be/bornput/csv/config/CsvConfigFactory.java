@@ -1,0 +1,45 @@
+package be.bornput.csv.config;
+
+import be.bornput.csv.reflection.strategy.impl.DefaultDateStrategy;
+import be.bornput.csv.reflection.strategy.impl.DefaultEmbeddedStrategy;
+import be.bornput.csv.reflection.strategy.impl.DefaultFieldOrderStrategy;
+import be.bornput.csv.reflection.strategy.impl.DefaultNumberStrategy;
+import be.bornput.csv.reflection.strategy.impl.DefaultQuoteStrategy;
+
+import java.util.Locale;
+
+public final class CsvConfigFactory {
+
+    private CsvConfigFactory() {}
+
+    public static CsvConfig defaultConfig() {
+
+        CsvConfig base = CsvConfig.builder()
+                .delimiter(',')
+                .listDelimiter(';')
+                .trimValues(true)
+                .writeHeader(true)
+                .build();
+
+        return base.toBuilder()
+                .quoteStrategy(new DefaultQuoteStrategy(base))
+                .dateStrategy(new DefaultDateStrategy(base, "yyyy-MM-dd"))
+                .numberStrategy(new DefaultNumberStrategy(base, "#.##", Locale.US))
+                .embeddedStrategy(new DefaultEmbeddedStrategy(base))
+                .fieldOrderStrategy(new DefaultFieldOrderStrategy())
+                .build();
+    }
+
+    public static CsvConfig copyWithCustomListDelimiter(CsvConfig config, char listDelimiter) {
+        return CsvConfig.builder()
+                .delimiter(config.getDelimiter())
+                .trimValues(config.isTrimValues())
+                .writeHeader(config.isWriteHeader())
+                .quoteStrategy(config.getQuoteStrategy())
+                .dateStrategy(config.getDateStrategy())
+                .numberStrategy(config.getNumberStrategy())
+                .embeddedStrategy(config.getEmbeddedStrategy())
+                .listDelimiter(listDelimiter)
+                .build();
+    }
+}
