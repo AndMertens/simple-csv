@@ -2,10 +2,13 @@ package be.bornput.csv.csv.mapper;
 
 import be.bornput.csv.csv.annotations.CsvIgnore;
 import be.bornput.csv.csv.config.CsvConfig;
+import be.bornput.csv.csv.exception.ConversionException;
 import be.bornput.csv.csv.util.FieldMappingUtils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +25,10 @@ public class CsvReaderMapper extends BaseCsvMapper {
     /**
      * Read CSV into list of objects of type T.
      */
-    public <T> List<T> read(BufferedReader reader, Class<T> clazz) throws Exception {
+    public <T> List<T> read(BufferedReader reader, Class<T> clazz)
+            throws IOException, NoSuchMethodException, InvocationTargetException,
+            InstantiationException, IllegalAccessException, ConversionException {
+
         List<T> result = new ArrayList<>();
         String headerLine = reader.readLine();
         if (headerLine == null) return result;
@@ -41,15 +47,13 @@ public class CsvReaderMapper extends BaseCsvMapper {
 
             for (int i = 0; i < headers.size(); i++) {
                 Field f = fieldMap.get(headers.get(i));
-                if (f == null) continue;
-                if (f.isAnnotationPresent(CsvIgnore.class)) continue;
 
-                f.setAccessible(true);
-                String raw = i < values.size() ? values.get(i) : "";
-
-                // Convert value using ValueConverter + strategies
-                Object val = convertValue(f, raw);
-                f.set(instance, val);
+                if (f != null && !f.isAnnotationPresent(CsvIgnore.class)) {
+                    f.setAccessible(true);
+                    String raw = i < values.size() ? values.get(i) : "";
+                    Object val = convertValue(f, raw);
+                    f.set(instance, val);
+                }
             }
 
             result.add(instance);

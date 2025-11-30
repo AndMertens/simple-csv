@@ -7,6 +7,7 @@ import be.bornput.csv.csv.exception.ElementConversionException;
 import be.bornput.csv.csv.util.FieldMappingUtils;
 
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class CsvWriterMapper extends BaseCsvMapper {
     /**
      * Write a list of objects to CSV.
      */
-    public <T> void write(BufferedWriter writer, List<T> objects, Class<T> clazz) throws Exception {
+    public <T> void write(BufferedWriter writer, List<T> objects, Class<T> clazz) throws IOException, ConversionException {
         List<Field> fields = getSortedFields(clazz);
 
         // Write header if configured

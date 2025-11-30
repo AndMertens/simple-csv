@@ -6,7 +6,6 @@ import java.util.*;
 import be.bornput.csv.csv.annotations.CsvColumn;
 import be.bornput.csv.csv.annotations.CsvEmbedded;
 import be.bornput.csv.csv.annotations.CsvOrder;
-import be.bornput.csv.csv.converter.ValueConverter;
 import be.bornput.csv.csv.annotations.CsvIgnore;
 
 public final class FieldMappingUtils {
@@ -63,13 +62,13 @@ public final class FieldMappingUtils {
     /** Flatten embedded objects recursively, producing keys like 'address.street' */
     public static Map<String, Field> mapEmbeddedFields(Class<?> clazz, String prefix) {
         Map<String, Field> map = new LinkedHashMap<>();
-        for (Field f : getAllFields(clazz)) {
-            if (f.isAnnotationPresent(CsvEmbedded.class) || ValueConverter.isEmbedded(f)) {
-                String nestedPrefix = prefix.isEmpty() ? f.getName() : prefix + "." + f.getName();
-                map.putAll(mapEmbeddedFields(f.getType(), nestedPrefix));
+        for (Field field : getAllFields(clazz)) {
+            if (field.isAnnotationPresent(CsvEmbedded.class) || isEmbedded(field)) {
+                String nestedPrefix = prefix.isEmpty() ? field.getName() : prefix + "." + field.getName();
+                map.putAll(mapEmbeddedFields(field.getType(), nestedPrefix));
             } else {
-                String key = prefix.isEmpty() ? f.getName() : prefix + "." + f.getName();
-                map.put(key, f);
+                String key = prefix.isEmpty() ? field.getName() : prefix + "." + field.getName();
+                map.put(key, field);
             }
         }
         return map;
@@ -92,4 +91,18 @@ public final class FieldMappingUtils {
 
         return fields;
     }
+
+    /**
+     * Determines if a field should be treated as an embedded (nested) object
+     */
+    public static boolean isEmbedded(Field f) {
+        Class<?> t = f.getType();
+        if (t.isPrimitive() || t.equals(String.class)) return false;
+        if (Number.class.isAssignableFrom(t) || Boolean.class.equals(t)) return false;
+        if (Date.class.equals(t) || t.isEnum()) return false;
+        if (Collection.class.isAssignableFrom(t) || t.isArray()) return false;
+        // User-defined classes outside java.* packages
+        return t.getPackage() == null || !t.getPackage().getName().startsWith("java.");
+    }
+
 }

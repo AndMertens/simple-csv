@@ -2,10 +2,16 @@ package be.bornput.csv.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
-public class MyPojo {
-    String name;
-    int age;
+@NoArgsConstructor
+@Data
+public class MyPojo
+{
+    private String name;
+    private int age;
+
+
+
 }

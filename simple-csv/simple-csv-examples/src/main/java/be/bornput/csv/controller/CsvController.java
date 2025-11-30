@@ -18,14 +18,11 @@ public class CsvController {
 
     @GetMapping("/csv-demo")
     public List<MyPojo> csvDemo() throws Exception {
-        String file = "example.csv";
-
         List<MyPojo> objects = List.of(
                 new MyPojo("Alice", 30),
                 new MyPojo("Bob", 25)
         );
 
-        csvService.writeCsv(file, objects);
-        return csvService.readCsv(file);
+        return csvService.writeAndReadTempCsv(objects, MyPojo.class);
     }
 }

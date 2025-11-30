@@ -9,6 +9,8 @@ import lombok.Data;
 public final class CsvConfig {
 
     private final char delimiter;
+    @Builder.Default
+    private final char listDelimiter = ';';
     private final boolean trimValues;
     private final boolean writeHeader;
 

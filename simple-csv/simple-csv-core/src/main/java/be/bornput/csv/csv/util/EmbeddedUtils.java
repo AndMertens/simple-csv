@@ -17,6 +17,9 @@ public final class EmbeddedUtils {
 
     private EmbeddedUtils() {}
 
+    /**
+     * Flatten an embedded object into CSV values (ordered by @CsvOrder).
+     */
     public static List<String> flattenObject(Object obj, Field parentField, CsvConfig config)
             throws ElementConversionException {
 
@@ -27,6 +30,7 @@ public final class EmbeddedUtils {
         List<Field> fields = FieldMappingUtils.getAllFields(obj.getClass());
         fields.removeIf(f -> f.isAnnotationPresent(CsvIgnore.class));
 
+        // Sort by @CsvOrder
         fields.sort(Comparator.comparingInt(f ->
                 f.isAnnotationPresent(CsvOrder.class)
                         ? f.getAnnotation(CsvOrder.class).value()
@@ -34,31 +38,40 @@ public final class EmbeddedUtils {
         ));
 
         List<String> result = new ArrayList<>();
-
         for (Field f : fields) {
             f.setAccessible(true);
             try {
                 Object value = f.get(obj);
-                result.add(ValueConverter.toString(value, f, config));
+                if (FieldMappingUtils.isEmbedded(f)) {
+                    result.addAll(flattenObject(value, f, config));
+                } else {
+                    result.add(ValueConverter.toString(value, f, config));
+                }
             } catch (Exception ex) {
                 throw new ElementConversionException(
-                        "Failed to flatten field '" + f.getName()
-                                + "' of embedded object " + parentField.getName(), ex
+                        "Failed to flatten field '" + f.getName() + "' of embedded object "
+                                + parentField.getName(), ex
                 );
             }
         }
-
         return result;
     }
 
+    /**
+     * Convert embedded object to CSV string.
+     */
     public static String flattenToCsvString(Object obj, Field parentField, CsvConfig config)
             throws ElementConversionException {
         return String.join(",", flattenObject(obj, parentField, config));
     }
 
+    /**
+     * Count CSV columns contributed by an embedded field.
+     */
     private static int countEmbeddedFields(Field parentField) {
+        Class<?> type = parentField.getType();
         return (int) FieldMappingUtils
-                .getAllFields(parentField.getType())
+                .getAllFields(type)
                 .stream()
                 .filter(f -> !f.isAnnotationPresent(CsvIgnore.class))
                 .count();

@@ -12,6 +12,7 @@ public final class CsvConfigFactory {
 
         CsvConfig base = CsvConfig.builder()
                 .delimiter(',')
+                .listDelimiter(';')
                 .trimValues(true)
                 .writeHeader(true)
                 .build();
@@ -22,6 +23,19 @@ public final class CsvConfigFactory {
                 .numberStrategy(new DefaultNumberStrategy(base, "#.##", Locale.US))
                 .embeddedStrategy(new DefaultEmbeddedStrategy(base))
                 .fieldOrderStrategy(new DefaultFieldOrderStrategy())
+                .build();
+    }
+
+    public static CsvConfig copyWithCustomListDelimiter(CsvConfig config, char listDelimiter) {
+        return CsvConfig.builder()
+                .delimiter(config.getDelimiter())
+                .trimValues(config.isTrimValues())
+                .writeHeader(config.isWriteHeader())
+                .quoteStrategy(config.getQuoteStrategy())
+                .dateStrategy(config.getDateStrategy())
+                .numberStrategy(config.getNumberStrategy())
+                .embeddedStrategy(config.getEmbeddedStrategy())
+                .listDelimiter(listDelimiter)
                 .build();
     }
 }

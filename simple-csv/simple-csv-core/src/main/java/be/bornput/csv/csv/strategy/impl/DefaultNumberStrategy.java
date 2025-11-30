@@ -1,9 +1,7 @@
 package be.bornput.csv.csv.strategy.impl;
 
-import be.bornput.csv.csv.annotations.CsvNumber;
 import be.bornput.csv.csv.config.CsvConfig;
 import be.bornput.csv.csv.exception.ConversionException;
-import be.bornput.csv.csv.exception.ValueConversionException;
 import be.bornput.csv.csv.strategy.api.NumberStrategy;
 
 import java.lang.reflect.Field;
